@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>测试拖拉拽</title>
+</head>
+<body>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            border: 1px #000 solid;
+            margin: 50px auto;
+        }
+        .box{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width:200px;
+            height: 200px;
+            background-color: lightblue;
+        }
+    </style>
+    <div class="wrapper">
+        <div class="box"></div>
+    </div>
+
+    <script>
+        // 
+        var oBox = document.getElementsByClassName('box')[0];
+        var wrap = document.getElementsByClassName('wrapper')[0];
+        
+        // 按下事件------
+        oBox.addEventListener('mousedown', function(e){
+            // 取得光标按下时的坐标点数据lastX,lastY
+            var lastX = e.clientX;
+            var lastY = e.clientY;
+
+            // 移动事件 按下S标后在文档中移动时
+            document.onmousemove = function(e){
+                // 取得当前按下坐标点移动的坐标
+                var nowX = e.clientX;
+                var nowY = e.clientY;
+                
+                // 按下点移动的坐标差值
+                var disX = nowX-lastX;
+                var disY = nowY-lastY;
+                
+                // 
+                var left            = oBox.offsetLeft + disX;
+                var top             = oBox.offsetTop + disY;
+
+                // 边界控制
+                left    = left <= 0 ? 0 : left;
+                top     = top <= 0 ? 0 : top;
+                left    = left >= (500-200)? 300: left;
+                top     = top >= (500-200)? 300: top;
+
+                oBox.style.left     = left + "px"
+                oBox.style.top      = top + "px"
+
+                lastX   = nowX;
+                lastY   = nowY;
+            }
+
+            // 放开事件
+            oBox.addEventListener('mouseup', function(){
+                document.onmousemove = null;
+            })
+        })
+
+        // 移出到外面事件 -->将mouse移动的处理动作停止置空
+        wrap.onmouseleave = function() {
+            document.onmousemove = null;
+        }
+
+
+
+    </script>
+</body>
+</html>
